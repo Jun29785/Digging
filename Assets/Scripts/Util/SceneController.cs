@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Define;
 
-public class SceneController : MonoBehaviour
+public class SceneController : Singleton<SceneController>
 {
-    // Start is called before the first frame update
-    void Start()
+    public SceneType CurrentScene;
+
+    protected override void Awake()
     {
-        
+        base.Awake();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void LoadScene(SceneType scene)
     {
-        
+        SceneManager.LoadScene((int)scene);
     }
 }
