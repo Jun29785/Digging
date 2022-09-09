@@ -1,18 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System;
 
-public class UserDataManager : MonoBehaviour
+public class UserDataManager : Singleton<UserDataManager>
 {
-    // Start is called before the first frame update
-    void Start()
+    public UserData userData;
+
+    string path;
+
+    protected override void Awake()
     {
-        
+        base.Awake();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        path = Path.Combine(Application.persistentDataPath, "UserData.json");
+    }
+
+    public void LoadUserData()
+    {
+        try
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream stream = File.OpenRead(path);
+            userData = (UserData)bf.Deserialize(stream);
+            stream.Close();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+        }
+    }
+
+    public void SaveUserData()
+    {
+        try
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream stream = File.Create(path);
+
+            bf.Serialize(stream, userData);
+            stream.Close();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+        }
     }
 }
