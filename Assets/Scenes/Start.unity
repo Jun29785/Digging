@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 28887857}
   - component: {fileID: 28887856}
   - component: {fileID: 28887859}
+  - component: {fileID: 28887860}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -197,11 +198,24 @@ MonoBehaviour:
   userData:
     Minerals:
       keys: []
+      values: 
     Depth: 0
     StorageLevel: 0
     CoolerLevel: 0
     EngineLevel: 0
     DrillLevel: 0
+--- !u!114 &28887860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28887855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9133ad7e1da47034fa24fcef2caa4708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &693885809
 GameObject:
   m_ObjectHideFlags: 0
