@@ -18,9 +18,9 @@ public class NumberSystem : MonoBehaviour
         }
     }
 
-    public string ToString(BigInteger coin)
+    public string ToString(string coin)
     {
-        if (coin == 0) { return "0"; }
+        if (coin == "0") { return "0"; }
 
         int unitID = 0;
 

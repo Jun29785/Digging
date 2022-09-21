@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System;
 using Define;
@@ -10,6 +9,8 @@ public class UserDataManager : Singleton<UserDataManager>
 {
     public UserData userData;
 
+    string directory = "/SaveData/";
+    string filename = "UserData.json";
     string path;
 
     protected override void Awake()
@@ -19,19 +20,28 @@ public class UserDataManager : Singleton<UserDataManager>
 
     private void Start()
     {
-        path = Path.Combine(Application.persistentDataPath, "UserData.json");
+        path = Application.persistentDataPath + directory;
+        Debug.Log($":: UserDataPath -> {path}");
+        InitializeUserData();
+        LoadUserData();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+            SaveUserData();
     }
 
     public void InitializeUserData()
     {
-        userData.Coin = 0;
+        userData.Coin = "0";
         userData.CoolerLevel = 0;
         userData.DrillLevel = 0;
         userData.EngineLevel = 0;
         userData.StorageLevel = 0;
         userData.Minerals = new SerializableDictionary<string, long>();
         userData.Depth = 0;
-        userData.CurrentDepthProgress = 0;
+        userData.CurrentDepthProgress = "0";
 
         foreach(var mineral in Enum.GetValues(typeof(MineralType)))
             userData.Minerals.Add(mineral.ToString(),0);
@@ -41,14 +51,24 @@ public class UserDataManager : Singleton<UserDataManager>
     {
         try
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream stream = File.OpenRead(path);
-            userData = (UserData)bf.Deserialize(stream);
-            stream.Close();
+            if (File.Exists(path + filename))
+            {
+                string json = File.ReadAllText(path + filename);
+                userData = JsonUtility.FromJson<UserData>(json);
+            }
+            else
+            {
+                Debug.LogWarning($":: SaveFile does not exit");
+            }
+
+            //BinaryFormatter bf = new BinaryFormatter();
+            //FileStream stream = File.OpenRead(path);
+            //userData = (UserData)bf.Deserialize(stream);
+            //stream.Close();
         }
         catch (Exception e)
         {
-            Debug.Log(e.Message);
+            Debug.LogError(e.Message);
         }
     }
 
@@ -56,15 +76,27 @@ public class UserDataManager : Singleton<UserDataManager>
     {
         try
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream stream = File.Create(path);
+            
+            if (!Directory.Exists(path))
+            {
+                // 존재하지 않다면
+                Directory.CreateDirectory(path);
+            }
 
-            bf.Serialize(stream, userData);
-            stream.Close();
+            string json = JsonUtility.ToJson(userData);
+            Debug.Log($":: Json Data -> {json}");
+
+            File.WriteAllText(path + filename, json);
+
+            //BinaryFormatter bf = new BinaryFormatter();
+            //FileStream stream = File.Create(path);
+
+            //bf.Serialize(stream, userData);
+            //stream.Close();
         }
         catch (Exception e)
         {
-            Debug.Log(e.Message);
+            Debug.LogError(e.Message);
         }
     }
 }
