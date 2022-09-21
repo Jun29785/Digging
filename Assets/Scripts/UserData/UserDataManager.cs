@@ -29,7 +29,7 @@ public class UserDataManager : Singleton<UserDataManager>
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.A))
-            SaveUserData();
+            LoadUserData();
     }
 
     public void InitializeUserData()
@@ -49,11 +49,13 @@ public class UserDataManager : Singleton<UserDataManager>
 
     public void LoadUserData()
     {
+        Debug.LogWarning($":: Start LoadUserData {DateTime.Now}");
         try
         {
             if (File.Exists(path + filename))
             {
                 string json = File.ReadAllText(path + filename);
+                Debug.Log($":: Json Data -> {json}");
                 userData = JsonUtility.FromJson<UserData>(json);
             }
             else
@@ -70,10 +72,12 @@ public class UserDataManager : Singleton<UserDataManager>
         {
             Debug.LogError(e.Message);
         }
+        Debug.LogWarning($":: End LoadUserData {DateTime.Now}");
     }
 
     public void SaveUserData()
     {
+        Debug.LogWarning($":: Start SaveUserData {DateTime.Now}");
         try
         {
             
@@ -98,5 +102,6 @@ public class UserDataManager : Singleton<UserDataManager>
         {
             Debug.LogError(e.Message);
         }
+        Debug.LogWarning($":: End SaveUserData {DateTime.Now}");
     }
 }
